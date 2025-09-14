@@ -111,14 +111,14 @@
     </div>
   </header>
 
-  <div class="top-banner">
+  <div class="top-banner"> <%-- 탑 배너 아직 추가 안함 --%> 
     <img src="image/탑배너.jpg" alt="탑 배너" />
   </div>
 
   <div class="container">
     <main class="main">
       <div class="headline">
-        <img src="image/PEAK.jpg" alt="메인 뉴스" />
+        <img src="image/PEAK.jpg" alt="메인 뉴스" /> <%-- 메인 사진 수정할 예정 --%> 
         <div class="title">친구들이랑 하기 좋은 게임 'PEAK'</div>
       </div>
 
@@ -140,7 +140,7 @@
 
         <!-- 인기글 섹션 -->
         <div class="popular-section">
-          <h2>🔥 인기글</h2>
+          <h2>🔥 인기글</h2> <%-- 인기글 사진, 내용 추가할 예정 --%> 
           <div class="popular-list">
             <div class="popular-item" onclick="location.href='#';">
               <img src="popular1.jpg" alt="인기글1" />
