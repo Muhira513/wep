@@ -1,195 +1,253 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<jsp:useBean id="now" class="java.util.Date" />
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+
+<%
+    // 컨트롤러에서 넘겨준 article 객체 받기 (예시용)
+    String title = (String) request.getAttribute("title");
+    if (title == null) title = "스타듀밸리: 힐링 농장 게임";
+
+    String author = (String) request.getAttribute("author");
+    if (author == null) author = "익명";
+
+    String content = (String) request.getAttribute("content");
+    if (content == null) content = "스타듀밸리는 농사, 낚시, 채광, 마을 교류, 연애 등 다양한 요소를 즐길 수 있는 힐링형 인디게임입니다.";
+
+    int viewCount = request.getAttribute("viewCount") != null ? (Integer) request.getAttribute("viewCount") : 0000;
+
+    Date date = (Date) request.getAttribute("publishedAt");
+    if (date == null) date = new Date();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+    String publishedAt = sdf.format(date);
+
+    String tags = (String) request.getAttribute("tags");
+    if (tags == null) tags = "농사, 힐링, 인디게임";
+
+    String prevArticle = (String) request.getAttribute("prevArticle");
+    if (prevArticle == null) prevArticle = "이전기사";
+
+    String nextArticle = (String) request.getAttribute("nextArticle");
+    if (nextArticle == null) nextArticle = "다음기사";
+
+    // 댓글 리스트 (DB 대신 예시용)
+    List<String> comments = (List<String>) request.getAttribute("comments");
+    if (comments == null) {
+        comments = new ArrayList<>();
+        comments.add("정말 재밌는 게임이에요!");
+        comments.add("농사게임 중 최고 👍");
+        comments.add("노가다 시뮬레이션");
+    }
+%>
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>
-    <c:choose>
-      <c:when test="${not empty article}">
-        <c:out value="${article.title}" />
-      </c:when>
-      <c:otherwise>GameLike</c:otherwise>
-    </c:choose>
-    - GameLike
-  </title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <title><%= title %> - GameLinks</title>
   <style>
-    /* CSS 생략 (기존 스타일 그대로 사용) */
+    :root {
+      --bg: #ffffff;
+      --text: #222222;
+      --muted: #666666;
+      --border: #e0e0e0;
+      --primary: #0056b3;
+      --chip-bg: #f1f3f5;
+      --chip-text: #333;
+    }
+    body {
+      margin: 0;
+      font-family: 'Pretendard', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    header {
+      background: #0d1033;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header .logo {
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #ffffff;
+    }
+    nav a { margin: 0 10px; color: #ffffff; }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px;
+      display: flex;
+      gap: 20px;
+    }
+    .main { flex: 3; }
+    .sidebar { flex: 1; }
+    h1.headline { font-size: 1.8rem; margin: 12px 0; }
+    .subhead { font-size: 1.1rem; color: var(--muted); }
+    .meta { font-size: 0.9rem; color: var(--muted); margin-bottom: 16px; }
+    .hero img { width: 100%; border-radius: 8px; }
+    .content { margin: 20px 0; }
+    .tags { margin: 10px 0; }
+    .chip {
+      display: inline-block;
+      background: var(--chip-bg);
+      color: var(--chip-text);
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin: 2px 4px 2px 0;
+    }
+    .nav-articles {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+    }
+    .nav-articles a {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fafafa;
+    }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      padding: 12px;
+      margin-bottom: 18px;
+    }
+    .comments {
+      margin-top: 30px;
+    }
+    .comments h3 { margin-bottom: 10px; }
+    .comment-box {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      margin: 8px 0;
+      background: #fafafa;
+    }
+    .comment-form textarea {
+      width: 100%;
+      height: 60px;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      resize: none;
+    }
+    .comment-form button {
+      margin-top: 6px;
+      padding: 6px 12px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .ad {
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    footer {
+      border-top: 1px solid var(--border);
+      background: #0d1033;
+      padding: 16px 0;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #ffffff;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="container row">
-      <div class="logo">YuhanGames<span class="dot">.</span></div>
-      <nav class="primary">
-        <a href="#">뉴스</a>
-        <a href="#">리뷰</a>
-        <a href="#">가이드</a>
-        <a href="#">인터뷰</a>
-        <a href="#">E스포츠</a>
-        <a href="#">영상</a>
-      </nav>
-      <div class="search">
-        <form action="/search" method="get">
-          <input type="text" name="q" placeholder="게임, 기사 검색" />
-        </form>
-      </div>
-    </div>
+  <header>
+    <a href="menu.jsp"><span class="logo">GameLinks</span></a>
+    <nav>
+      <a href="menu.jsp">홈</a>
+      <a href="#">뉴스</a>
+      <a href="#">리뷰</a>
+      <a href="#">가이드</a>
+      <a href="#">인터뷰</a>
+      <a href="#">e스포츠</a>
+      <a href="#">영상</a>
+    </nav>
   </header>
 
   <div class="container">
-    <c:if test="${not empty article}">
-      <div class="breadcrumb">
-        <a href="/">홈</a>
-        <span>›</span>
-        <a href="/category/${article.category}"><c:out value="${article.category}" /></a>
-        <c:if test="${not empty article.subcategory}">
-          <span>›</span>
-          <a href="/category/${article.category}/${article.subcategory}"><c:out value="${article.subcategory}" /></a>
-        </c:if>
+    <main class="main">
+      <h1 class="headline"><%= title %></h1>
+      <p class="subhead">by <%= author %></p>
+      <div class="meta">
+        조회수: <%= viewCount %> · <%= publishedAt %>
       </div>
 
-      <div class="layout">
-        <main>
-          <div style="display:grid;grid-template-columns:42px 1fr;gap:18px;align-items:start">
-            <!-- 좌측 공유 버튼 -->
-            <div class="share" aria-label="공유 버튼">
-              <a href="https://www.facebook.com/sharer/sharer.php?u=${pageContext.request.requestURL}" target="_blank" rel="noopener" title="Facebook 공유">F</a>
-              <a href="https://twitter.com/intent/tweet?url=${pageContext.request.requestURL}&text=${fn:escapeXml(article.title)}" target="_blank" rel="noopener" title="X 공유">X</a>
-              <a href="mailto:?subject=${fn:escapeXml(article.title)}&body=${pageContext.request.requestURL}" title="메일">@</a>
-            </div>
-
-            <!-- 기사 본문 -->
-            <section>
-              <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <span class="chip">Stardew_Valley</span>
-                <c:if test="${not empty article.subcategory}">
-                  <span class="chip"><c:out value="${article.subcategory}" /></span>
-                </c:if>
-              </div>
-
-              <h1 class="headline"><c:out value="${article.title}" /></h1>
-              <c:if test="${not empty article.subtitle}">
-                <p class="subhead"><c:out value="${article.subtitle}" /></p>
-              </c:if>
-
-              <div class="meta">
-                <span>작성자
-                  <c:if test="${not empty article.authorName}">
-                    <a href="${article.authorProfileUrl}"><strong><c:out value="${article.authorName}" /></strong></a>
-                  </c:if>
-                </span>
-                <span class="sep">·</span>
-                <span>게시 <fmt:formatDate value="${article.publishedAt}" pattern="yyyy.MM.dd HH:mm" /></span>
-                <c:if test="${not empty article.updatedAt}">
-                  <span class="sep">·</span>
-                  <span>수정 <fmt:formatDate value="${article.updatedAt}" pattern="yyyy.MM.dd HH:mm" /></span>
-                </c:if>
-                <span class="sep">·</span>
-                <span>조회 <strong><fmt:formatNumber value="${article.viewCount}" /></strong></span>
-                <span class="sep">·</span>
-                <span>댓글 <strong><fmt:formatNumber value="${article.commentCount}" /></strong></span>
-              </div>
-
-              <figure class="hero">
-                <img src="Stardew_Valley.jpg" alt="메인 이미지" loading="lazy"/>
-                <c:if test="${not empty article.heroCaption}">
-                  <figcaption><c:out value="${article.heroCaption}" /></figcaption>
-                </c:if>
-              </figure>
-
-              <article class="content">
-                <c:if test="${not empty article.bodyHtml}">
-                  <c:out value="${article.bodyHtml}" escapeXml="false"/>
-                </c:if>
-
-                <div class="tags">
-                  <c:forEach var="t" items="${tags}">
-                    <a class="chip" href="/tag/${t}">#<c:out value="${t}" /> 농사</a>
-                    <a class="chip" href="/tag/${t}">#<c:out value="${t}" /> 힐링</a>
-                    <a class="chip" href="/tag/${t}">#<c:out value="${t}" /> 건축</a>
-                    <a class="chip" href="/tag/${t}">#<c:out value="${t}" /> 인생 시뮬레이션</a>
-                  </c:forEach>
-                </div>
-
-                <div class="prevnext">
-                  <c:if test="${not empty prev}">
-                    <a class="pn-card" href="/view?id=${prev.id}">← 이전 기사: <strong><c:out value="${prev.title}"/></strong></a>
-                  </c:if>
-                  <c:if test="${not empty next}">
-                    <a class="pn-card" href="/view?id=${next.id}">다음 기사: <strong><c:out value="${next.title}"/></strong> →</a>
-                  </c:if>
-                </div>
-              </article>
-
-              <div id="comments" style="margin-top:18px">
-                <div class="card">
-                  <h3>댓글</h3>
-                  <div class="body">
-                    <p style="color:var(--muted)">댓글 시스템을 연동하세요 (예: 자체 구현, Disqus 등).</p>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </div>
-        </main>
-
-        <aside class="sidebar">
-          <div class="ad">
-            <img src="광고배너_2.jpg" alt="광고 배너" width="300" height="250" />
-          </div>
-
-          <div class="card">
-            <h3>연관 기사</h3>
-            <div class="body list">
-              <c:forEach var="r" items="${related}">
-                <a href="/view?id=${r.id}">
-                  <img class="thumb" src="Hollow_Knight.jpg" alt="썸네일" loading="lazy"/>
-                  <span><c:out value="${r.title}" /></span>
-                </a>
-              </c:forEach>
-            </div>
-          </div>
-
-          <div class="card">
-            <h3>인기</h3>
-            <div class="body list">
-              <c:forEach var="t" items="${trending}">
-                <a href="/view?id=${t.id}">
-                  <span style="grid-column: span 2"><c:out value="${t.title}" /></span>
-                </a>
-              </c:forEach>
-            </div>
-          </div>
-
-          <div class="ad">
-            <img src="광고배너.jpg" alt="광고 배너" width="300" height="600" />
-          </div>
-        </aside>
+      <div class="hero">
+        <img src="image/Stardew_Valley.jpg" alt="메인 이미지">
       </div>
-    </c:if>
+
+      <div class="content">
+        <p><%= content %></p>
+      </div>
+
+      <!-- 해시태그 -->
+      <div class="tags">
+        <% if (tags != null && !tags.isEmpty()) {
+             String[] tagList = tags.split(",");
+             for (String t : tagList) { %>
+               <span class="chip">#<%= t.trim() %></span>
+        <%   }
+           } %>
+      </div>
+
+      <!-- 이전/다음 기사 -->
+      <div class="nav-articles">
+        <a href="prev.jsp">&larr; <%= prevArticle %></a>
+        <a href="next.jsp"><%= nextArticle %> &rarr;</a>
+      </div>
+
+      <!-- 댓글 -->
+      <div class="comments">
+        <h3>댓글</h3>
+        <% for (String c : comments) { %>
+          <div class="comment-box"><%= c %></div>
+        <% } %>
+
+        <form class="comment-form" method="post" action="addComment.jsp">
+          <textarea name="comment" placeholder="댓글을 입력하세요..."></textarea>
+          <br>
+          <button type="submit">등록</button>
+        </form>
+      </div>
+    </main>
+
+    <aside class="sidebar">
+      <!-- 광고 배너 (사이드바 최상단) -->
+      <div class="ad">
+        <img src="image/광고배너_2.jpg" alt="광고 배너" width="300" height="250">
+      </div>
+
+      <div class="card">
+        <h3>연관 기사</h3>
+        <ul>
+          <li><a href="#">PUBG</a></li>
+          <li><a href="#">Hollow_Knight_Silksong</a></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3></h3>
+        <img src="image/광고배너.jpg" alt="인기 게임" style="width:100%">
+      </div>
+    </aside>
   </div>
 
   <footer>
-    <div class="container foot">
-      <div>© <fmt:formatDate value="${now}" pattern="yyyy" /> YuhanGames</div>
-      <div style="display:flex;gap:12px">
-        <a href="#">회사소개</a>
-        <a href="#">문의</a>
-        <a href="#">개인정보처리방침</a>
-        <a href="#">이용약관</a>
-      </div>
-    </div>
+    © YuhanGames | 회사소개 | 문의 | 개인정보처리방침 | 이용약관
   </footer>
 </body>
 </html>
