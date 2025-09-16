@@ -130,7 +130,7 @@
             <p class="meta">신재연 기자 • 2025-09-14</p>
           </div>
         </div>
-        <div class="news-card" onclick="location.href='wep1.jsp';" style="cursor:pointer;">
+        <div class="news-card" onclick="location.href='web1.jsp';" style="cursor:pointer;">
           <img src="image/Stardew_Valley.jpg" alt="기사2" />
           <div class="info">
             <h3>혼자서 하기 좋은 힐링 게임</h3>
