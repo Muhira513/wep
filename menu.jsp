@@ -22,7 +22,7 @@
     * {margin:0; padding:0; box-sizing:border-box;}
     body {font-family: Pretendard, sans-serif; background: var(--bg); color: var(--text);}
     a {text-decoration:none; color:inherit;}
-
+    
     /* 헤더 */
     header {
       border-bottom:1px solid var(--line);
@@ -39,7 +39,7 @@
 
     /* 배너 */
     .top-banner {text-align:center; margin:10px 0;}
-    .top-banner img {width:100%; height:250px; object-fit:cover; border-radius:10px;}
+    .top-banner img {width:1200px; height:200px; object-fit:cover; border-radius:10px;}
 
     /* 본문 */
     .container {display:flex; gap:20px; max-width:1200px; margin:20px auto; padding:0 20px;}
@@ -112,7 +112,7 @@
   </header>
 
   <div class="top-banner"> <%-- 탑 배너 아직 추가 안함 --%> 
-    <img src="image/탑배너.jpg" alt="탑 배너" />
+    <img src="image/탑 배너.jpg" alt="탑 배너" />
   </div>
 
   <div class="container">
@@ -182,12 +182,18 @@
       </div>
 
       <div class="widget">
-        <h4>인기광고</h4>
-        <img src="image/PUBG.jpg" alt="인기광고" style="width:100%; border-radius:6px;" />
-      </div>
-    </aside>
+    <h4>인기광고</h4>
+    <img src="image/PUBG.jpg" alt="인기광고" style="width:100%; border-radius:6px;" />
   </div>
-
+  <div class="widget">
+    <h4>추천</h4>
+    <a href="#">
+      <img src="image/광고배너.jpg" alt="현재 매출 상위권 게임" style="width:100%; border-radius:6px;" />
+    </a>
+  </div>
+</aside>
+ </div>
+  
   <footer>
     ⓒ 2025 GameLinks. All rights reserved.
   </footer>
