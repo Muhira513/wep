@@ -118,11 +118,11 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       background: #fff;
-      padding: 12px;
-      margin-bottom: 18px;
+      padding: 10px;
+      margin: 20px 0;
     }
     .comments {
-      margin-top: 30px;
+       margin-bottom: 25px;
     }
     .comments h3 { margin-bottom: 10px; }
     .comment-box {
@@ -133,7 +133,7 @@
       background: #fafafa;
     }
     .comment-form textarea {
-      width: 100%;
+      width: 98%;
       height: 60px;
       padding: 8px;
       border-radius: 6px;
@@ -162,6 +162,17 @@
       color: #ffffff;
       text-align: center;
     }
+    
+    /* 인기글 섹션 */
+    .popular-section {margin-top:40px;}
+    .popular-section h2 {font-size:20px; margin-bottom:15px; color:var(--brand); font-weight:700;}
+    .popular-list {display:flex; flex-direction:column; gap:12px;}
+    .popular-item {display:flex; gap:12px; align-items:center; cursor:pointer;}
+    .popular-item img {width:80px; height:60px; object-fit:cover; border-radius:6px;}
+    .popular-item h4 {font-size:15px; margin:0;}
+    .popular-item p {font-size:12px; color:var(--muted); margin:2px 0 0;}
+    .popular-item:hover {background:#f0f0f0; border-radius:6px; transition:0.2s;}
+    
   </style>
 </head>
 <body>
@@ -243,6 +254,35 @@
         <h3></h3>
         <img src="image/광고배너.jpg" alt="인기 게임" style="width:100%">
       </div>
+      
+      <!-- ✅ 인기글 섹션 -->
+  <div class="card">
+    <h3>🔥 인기글</h3>
+    <div class="popular-list">
+      <div class="popular-item" onclick="location.href='#';" style="cursor:pointer; display:flex; gap:10px; margin-bottom:12px;">
+        <img src="popular1.jpg" alt="인기글1" style="width:80px; height:60px; object-fit:cover; border-radius:6px;">
+        <div>
+          <h4 style="margin:0; font-size:14px;">혼자서도 즐길 수 있는 게임 추천</h4>
+          <p style="margin:2px 0 0; font-size:12px; color:#666;">2025-09-13</p>
+        </div>
+      </div>
+      <div class="popular-item" onclick="location.href='#';" style="cursor:pointer; display:flex; gap:10px; margin-bottom:12px;">
+        <img src="popular2.jpg" alt="인기글2" style="width:80px; height:60px; object-fit:cover; border-radius:6px;">
+        <div>
+          <h4 style="margin:0; font-size:14px;">PEAK 게임 리뷰</h4>
+          <p style="margin:2px 0 0; font-size:12px; color:#666;">2025-09-12</p>
+        </div>
+      </div>
+      <div class="popular-item" onclick="location.href='#';" style="cursor:pointer; display:flex; gap:10px;">
+        <img src="popular3.jpg" alt="인기글3" style="width:80px; height:60px; object-fit:cover; border-radius:6px;">
+        <div>
+          <h4 style="margin:0; font-size:14px;">Stardew Valley 힐링 플레이</h4>
+          <p style="margin:2px 0 0; font-size:12px; color:#666;">2025-09-11</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ✅ 인기글 섹션 끝 -->
     </aside>
   </div>
 
